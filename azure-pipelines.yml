@@ -1,0 +1,33 @@
+# azure-pipelines.yml
+trigger:
+  branches:
+    include:
+      - main  # Adjust the branch name as needed
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  nodeVersion: '20.1.7'  # Specify the Node.js version to use
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '$(nodeVersion)'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install -g @angular/cli  # Install Angular CLI globally
+    npm install                    # Install project dependencies
+  displayName: 'Install Dependencies'
+
+- script: |
+    ng build --prod               # Build the Angular application
+  displayName: 'Build Angular Application'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '"C:\Users\DELL\Documents\getting-started (1)"'          # Path to the built Angular application
+    ArtifactName: 'angular-app'    # Name of the artifact
+    publishLocation: 'Container'
+  displayName: 'Publish Build Artifacts'
