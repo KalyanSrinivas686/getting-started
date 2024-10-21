@@ -18,7 +18,7 @@ steps:
 
 - script: |
     npm install -g @angular/cli  # Install Angular CLI globally
-    npm install                    # Install project dependencies
+    npm install                   # Install project dependencies
   displayName: 'Install Dependencies'
 
 - script: |
@@ -27,7 +27,7 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '"C:\Users\DELL\Documents\getting-started (1)"'          # Path to the built Angular application
+    PathtoPublish: 'dist'          # Path to the built Angular application (output folder)
     ArtifactName: 'angular-app'    # Name of the artifact
     publishLocation: 'Container'
   displayName: 'Publish Build Artifacts'
