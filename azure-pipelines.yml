@@ -1,32 +1,39 @@
+# Trigger the pipeline when code is pushed to the 'main' branch
 trigger:
   branches:
     include:
       - main  # Adjust the branch name as needed
 
+# Pool configuration - using the self-hosted pool
 pool:
-  name: MySelfHostedPool  # Replace with your self-hosted pool name
+  name: MySelfHostedPool  # Ensure this matches the exact name of your self-hosted pool
 
+# Define variables
 variables:
-  nodeVersion: '20.1.7'  # Specify the Node.js version to use
+  nodeVersion: '20.17.0'  # Specify the Node.js version to use
 
+# Define the steps for the pipeline
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '$(nodeVersion)'
+    versionSpec: '$(nodeVersion)'  # Use the specified Node.js version
   displayName: 'Install Node.js'
 
+# Install Angular CLI and project dependencies
 - script: |
-    npm install -g @angular/cli  # Install Angular CLI globally
-    npm install                   # Install project dependencies
+    npm install -g @angular/cli   # Install Angular CLI globally
+    npm install                   # Install project dependencies from package.json
   displayName: 'Install Dependencies'
 
+# Build the Angular application for production
 - script: |
-    ng build --prod               # Build the Angular application
+    ng build --prod  # Build the Angular application for production
   displayName: 'Build Angular Application'
 
+# Publish the build artifacts (e.g., the 'dist' folder)
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'D:\Angular\dist'          # Path to the built Angular application
-    ArtifactName: 'angular-app'    # Name of the artifact
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/dist'  # Path to the built Angular app (usually inside the 'dist' folder)
+    ArtifactName: 'angular-app'                              # Name of the artifact for publishing
     publishLocation: 'Container'
   displayName: 'Publish Build Artifacts'
